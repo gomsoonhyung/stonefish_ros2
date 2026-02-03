@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+<scenario>
+    <robot name="$(arg robot_name)" fixed="false" self_collisions="false">
+		<base_link name="Vehicle" type="compound" physics="submerged">
+			<!-- Main Hull - Cylindrical body with blunt front cap (~1.63m) -->
+			<external_part name="MainHull" type="model" physics="submerged" buoyant="false">
+				<physical>
+					<mesh filename="custom_auv_hull.obj" scale="1.0"/>
+					<thickness value="0.005"/>
+					<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+				</physical>
+				<material name="Fiberglass"/>
+				<look name="auv_body"/>
+				<compound_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			</external_part>
+
+			<!-- Tail Cone - Tapered rear section (0.22m) - Reversed for correct taper -->
+			<external_part name="TailCone" type="model" physics="submerged" buoyant="false">
+				<physical>
+					<mesh filename="custom_auv_tail.obj" scale="1.0"/>
+					<thickness value="0.003"/>
+					<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+				</physical>
+				<material name="Aluminium"/>
+				<look name="dark"/>
+				<compound_transform rpy="0.0 0.0 3.1416" xyz="-0.92 0.0 0.0"/>
+			</external_part>
+
+			<!-- Propeller Duct - CRP housing -->
+			<external_part name="PropellerDuct" type="model" physics="submerged" buoyant="false">
+				<physical>
+					<mesh filename="custom_auv_duct.obj" scale="1.0"/>
+					<thickness value="0.003"/>
+					<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+				</physical>
+				<material name="Aluminium"/>
+				<look name="gray"/>
+				<compound_transform rpy="0.0 0.0 0.0" xyz="-1.03 0.0 0.0"/>
+			</external_part>
+
+
+			<!-- Main Internal Cylinder (provides buoyancy and mass distribution) -->
+			<!-- Centered for balanced buoyancy -->
+			<internal_part name="MainCylinder" type="cylinder" physics="submerged" buoyant="true">
+				<dimensions radius="0.085" height="1.4"/>
+				<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+				<material name="Neutral"/>
+				<mass value="4.0"/>
+				<look name="dark"/>
+				<compound_transform rpy="0.0 1.571 0.0" xyz="0.0 0.0 0.0"/>
+			</internal_part>
+
+			<!-- Battery Pack (heavy, no buoyancy) - low for stability (NED: Z+ is down) -->
+			<internal_part name="BatteryPack" type="cylinder" physics="submerged" buoyant="false">
+				<dimensions radius="0.05" height="0.6"/>
+				<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+				<material name="Neutral"/>
+				<mass value="3.0"/>
+				<look name="dark"/>
+				<compound_transform rpy="0.0 1.571 0.0" xyz="0.0 0.0 0.05"/>
+			</internal_part>
+
+			<!-- Ballast weight - centered on X/Y, low (Z+) for stability -->
+			<internal_part name="Ballast" type="cylinder" physics="submerged" buoyant="false">
+				<dimensions radius="0.03" height="0.8"/>
+				<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+				<material name="Neutral"/>
+				<mass value="3.0"/>
+				<look name="dark"/>
+				<compound_transform rpy="0.0 1.571 0.0" xyz="0.0 0.0 0.03"/>
+			</internal_part>
+		</base_link>
+
+		<!-- Articulated Control Fins -->
+		<!-- Dorsal Fin (Top) - Pitch control -->
+		<!-- Extends upward (+Z) from hull surface, rotates around Y axis -->
+		<link name="DorsalFin" type="model" physics="submerged">
+			<physical>
+				<mesh filename="custom_auv_dorsal_fin.obj" scale="1.2"/>
+				<thickness value="0.003"/>
+				<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			</physical>
+			<material name="Aluminium"/>
+			<mass value="0.1"/>
+			<look name="red"/>
+		</link>
+
+		<joint name="DorsalFinJoint" type="revolute">
+			<parent name="Vehicle"/>
+			<child name="DorsalFin"/>
+			<origin rpy="0.0 0.0 0.0" xyz="-0.7 0.0 0.095"/>
+			<axis xyz="0.0 0.0 1.0"/>
+			<limits min="${-30.0*pi/180.0}" max="${30.0*pi/180.0}"/>
+		</joint>
+
+		<!-- Port Rudder (Left) - Yaw control -->
+		<!-- Extends left (-Y) from hull surface, rotates around X axis -->
+		<link name="PortRudder" type="model" physics="submerged">
+			<physical>
+				<mesh filename="custom_auv_port_rudder.obj" scale="1.2"/>
+				<thickness value="0.003"/>
+				<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			</physical>
+			<material name="Aluminium"/>
+			<mass value="0.1"/>
+			<look name="red"/>
+		</link>
+
+		<joint name="PortRudderJoint" type="revolute">
+			<parent name="Vehicle"/>
+			<child name="PortRudder"/>
+			<origin rpy="0.0 0.0 0.0" xyz="-0.7 -0.095 0.0"/>
+			<axis xyz="0.0 1.0 0.0"/>
+			<limits min="${-30.0*pi/180.0}" max="${30.0*pi/180.0}"/>
+		</joint>
+
+		<!-- Starboard Rudder (Right) - Yaw control -->
+		<!-- Extends right (+Y) from hull surface, rotates around X axis -->
+		<link name="StarboardRudder" type="model" physics="submerged">
+			<physical>
+				<mesh filename="custom_auv_starboard_rudder.obj" scale="1.2"/>
+				<thickness value="0.003"/>
+				<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			</physical>
+			<material name="Aluminium"/>
+			<mass value="0.1"/>
+			<look name="red"/>
+		</link>
+
+		<joint name="StarboardRudderJoint" type="revolute">
+			<parent name="Vehicle"/>
+			<child name="StarboardRudder"/>
+			<origin rpy="0.0 0.0 0.0" xyz="-0.7 0.095 0.0"/>
+			<axis xyz="0.0 1.0 0.0"/>
+			<limits min="${-30.0*pi/180.0}" max="${30.0*pi/180.0}"/>
+		</joint>
+
+		<!-- Ventral Fin (Bottom) - Pitch control -->
+		<!-- Extends downward (-Z) from hull surface, rotates around Y axis -->
+		<link name="VentralFin" type="model" physics="submerged">
+			<physical>
+				<mesh filename="custom_auv_ventral_fin.obj" scale="1.2"/>
+				<thickness value="0.003"/>
+				<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			</physical>
+			<material name="Aluminium"/>
+			<mass value="0.1"/>
+			<look name="red"/>
+		</link>
+
+		<joint name="VentralFinJoint" type="revolute">
+			<parent name="Vehicle"/>
+			<child name="VentralFin"/>
+			<origin rpy="0.0 0.0 0.0" xyz="-0.7 0.0 -0.095"/>
+			<axis xyz="0.0 0.0 1.0"/>
+			<limits min="${-30.0*pi/180.0}" max="${30.0*pi/180.0}"/>
+		</joint>
+
+		<!-- Sensors -->
+		<sensor name="dynamics" type="odometry" rate="30.0">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			<ros_publisher topic="/$(arg robot_name)/dynamics"/>
+		</sensor>
+
+		<sensor name="pressure" type="pressure" rate="5.0">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			<noise pressure="5.0"/>
+			<ros_publisher topic="/$(arg robot_name)/pressure"/>
+		</sensor>
+
+		<sensor name="dvl" type="dvl" rate="5.0">
+			<link name="Vehicle"/>
+			<origin rpy="3.1416 0.0 0.0" xyz="-0.5 0.0 0.0"/>
+			<specs beam_angle="30.0"/>
+			<range velocity="9.0 9.0 9.0" altitude_min="0.5" altitude_max="81.0"/>
+			<noise velocity="0.0015" altitude="0.001"/>
+			<ros_publisher topic="/$(arg robot_name)/dvl"/>
+		</sensor>
+
+		<sensor name="imu" type="imu" rate="50.0">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			<noise angle="0.000001745 0.000001745 0.000001745" angular_velocity="0.00001745"/>
+			<ros_publisher topic="/$(arg robot_name)/imu"/>
+		</sensor>
+
+		<sensor name="gps" type="gps" rate="1.0">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="0.5 0.0 -0.095"/>
+			<noise ned_position="0.5"/>
+			<ros_publisher topic="/$(arg robot_name)/gps"/>
+		</sensor>
+
+		<sensor name="front_camera" type="camera" rate="10.0">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="0.8 0.0 0.0"/>
+			<specs resolution_x="640" resolution_y="480" horizontal_fov="90.0"/>
+			<ros_publisher topic="/$(arg robot_name)/front_camera"/>
+		</sensor>
+
+		<!-- CRP Thruster (Counter-Rotating Propeller) -->
+		<!-- Front Propeller -->
+		<actuator name="ThrusterFront" type="thruster">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="-0.925 0.0 0.0"/>
+			<specs max_setpoint="${1200.0/60.0*2.0*pi}" inverted_setpoint="false" normalized_setpoint="true"/>
+			<propeller diameter="0.16" right="true">
+				<mesh filename="propeller.obj" scale="0.88" />
+				<material name="Neutral" />
+				<look name="yellow" />
+			</propeller>
+			<rotor_dynamics type="mechanical_pi">
+				<kp value="1.0"/>
+				<ki value="0.5"/>
+				<ilimit value="2.0"/>
+			</rotor_dynamics>
+			<thrust_model type="fluid_dynamics">
+				<thrust_coeff forward="0.52" reverse="0.45"/>
+				<torque_coeff value="0.06"/>
+			</thrust_model>
+			<ros_subscriber topic="/$(arg robot_name)/ThrusterFront/setpoint"/>
+		</actuator>
+
+		<!-- Rear Propeller (Counter-rotating) -->
+		<actuator name="ThrusterRear" type="thruster">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="-1.025 0.0 0.0"/>
+			<specs max_setpoint="${1200.0/60.0*2.0*pi}" inverted_setpoint="false" normalized_setpoint="true"/>
+			<propeller diameter="0.16" right="false">
+				<mesh filename="propeller.obj" scale="0.88" />
+				<material name="Neutral" />
+				<look name="yellow" />
+			</propeller>
+			<rotor_dynamics type="mechanical_pi">
+				<kp value="1.0"/>
+				<ki value="0.5"/>
+				<ilimit value="2.0"/>
+			</rotor_dynamics>
+			<thrust_model type="fluid_dynamics">
+				<thrust_coeff forward="0.52" reverse="0.45"/>
+				<torque_coeff value="0.06"/>
+			</thrust_model>
+			<ros_subscriber topic="/$(arg robot_name)/ThrusterRear/setpoint"/>
+		</actuator>
+
+		<!-- Control Fin Servos -->
+		<actuator name="DorsalFinServo" type="servo">
+			<joint name="DorsalFinJoint"/>
+			<controller position_gain="2.0" velocity_gain="0.5" max_torque="10.0"/>
+			<ros_subscriber topic="/$(arg robot_name)/DorsalFin/setpoint"/>
+		</actuator>
+
+		<actuator name="PortRudderServo" type="servo">
+			<joint name="PortRudderJoint"/>
+			<controller position_gain="2.0" velocity_gain="0.5" max_torque="10.0"/>
+			<ros_subscriber topic="/$(arg robot_name)/PortRudder/setpoint"/>
+		</actuator>
+
+		<actuator name="StarboardRudderServo" type="servo">
+			<joint name="StarboardRudderJoint"/>
+			<controller position_gain="2.0" velocity_gain="0.5" max_torque="10.0"/>
+			<ros_subscriber topic="/$(arg robot_name)/StarboardRudder/setpoint"/>
+		</actuator>
+
+		<actuator name="VentralFinServo" type="servo">
+			<joint name="VentralFinJoint"/>
+			<controller position_gain="2.0" velocity_gain="0.5" max_torque="10.0"/>
+			<ros_subscriber topic="/$(arg robot_name)/VentralFin/setpoint"/>
+		</actuator>
+
+		<world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+	</robot>
+</scenario>

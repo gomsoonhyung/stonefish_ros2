@@ -1,0 +1,68 @@
+control_modes:
+  idle: false
+
+  # Teleoperation mode for manual control
+  teleop:
+    x:          {p: 1.0,  i: 3.0,   d: 5.0,  v: 0.0, pid_max: 10.0, pid_min: -10.0}
+    yaw:        {p: 2.0,  i: 0.5,   d: 3.0,  v: 0.0, pid_max: 20.0, pid_min: -20.0}
+    pitch:      {p: 2.0,  i: 0.5,   d: 3.0,  v: 0.0, pid_max: 20.0, pid_min: -20.0}
+
+  # Flight mode for waypoint following
+  flight:
+    z:        {p: 20.0,  i: 2.0,   d: 5.0,  v: 0.0, pid_max: 30.0, pid_min: -30.0}
+    x:        {p: 50.0,  i: 10.0,  d: 0.0,  v: 0.0, pid_max: 30.0, pid_min: -30.0}
+    y:        {p: 50.0,  i: 10.0,  d: 0.0,  v: 0.0, pid_max: 30.0, pid_min: -30.0}
+    pitch:    {p: 10.0,  i: 0.0,   d: 10.0, v: 0.0, pid_max: 20.0, pid_min: -20.0}
+    yaw:      {p: 10.0,  i: 1.0,   d: 20.0, v: 0.0, pid_max: 30.0, pid_min: -30.0}
+
+  # Hold DOF mode for station keeping
+  hold_dof:
+    x:        {p: 50.0,  i: 1.0,   d: 2.0,  v: 0.0, pid_max: 20.0, pid_min: -20.0}
+    y:        {p: 50.0,  i: 1.0,   d: 2.0,  v: 0.0, pid_max: 20.0, pid_min: -20.0}
+    z:        {p: 20.0,  i: 1.0,   d: 5.0,  v: 0.0, pid_max: 20.0, pid_min: -20.0}
+    pitch:    {p: 10.0,  i: 0.01,  d: 5.0,  v: 0.0, pid_max: 20.0, pid_min: -20.0}
+    yaw:      {p: 10.0,  i: 0.2,   d: 5.0,  v: 0.0, pid_max: 20.0, pid_min: -20.0}
+
+# Thruster configuration for Girona500 AUV
+# Girona500 has 5 thrusters: 2 surge, 2 heave, 1 sway
+# Note: tf_prefix (GIRONA500/) is automatically added by MVP Control
+thruster_ids:
+  ThrusterSurgePort:
+    control_tf: "thruster_surge_port"
+    command_topic: "/GIRONA500/ThrusterSurgePort/setpoint"
+    force_topic: "/GIRONA500/ThrusterSurgePort/force"
+    limits: [-50.0, 50.0]  # N
+    delta_limit: 200.0     # N/s
+    polynomials: [0.0, 1.0]  # Simple linear mapping: force = RPM
+
+  ThrusterSurgeStarboard:
+    control_tf: "thruster_surge_starboard"
+    command_topic: "/GIRONA500/ThrusterSurgeStarboard/setpoint"
+    force_topic: "/GIRONA500/ThrusterSurgeStarboard/force"
+    limits: [-50.0, 50.0]
+    delta_limit: 200.0
+    polynomials: [0.0, 1.0]
+
+  ThrusterHeaveBow:
+    control_tf: "thruster_heave_bow"
+    command_topic: "/GIRONA500/ThrusterHeaveBow/setpoint"
+    force_topic: "/GIRONA500/ThrusterHeaveBow/force"
+    limits: [-50.0, 50.0]
+    delta_limit: 200.0
+    polynomials: [0.0, 1.0]
+
+  ThrusterHeaveStern:
+    control_tf: "thruster_heave_stern"
+    command_topic: "/GIRONA500/ThrusterHeaveStern/setpoint"
+    force_topic: "/GIRONA500/ThrusterHeaveStern/force"
+    limits: [-50.0, 50.0]
+    delta_limit: 200.0
+    polynomials: [0.0, 1.0]
+
+  ThrusterSway:
+    control_tf: "thruster_sway"
+    command_topic: "/GIRONA500/ThrusterSway/setpoint"
+    force_topic: "/GIRONA500/ThrusterSway/force"
+    limits: [-50.0, 50.0]
+    delta_limit: 200.0
+    polynomials: [0.0, 1.0]

@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<scenario>
+    <robot name="$(arg robot_name)" fixed="false" self_collisions="false">
+        <base_link name="Vehicle" type="compound" physics="submerged">
+            <external_part name="HullBottom" type="model" physics="submerged" buoyant="false">
+				<physical>
+					<mesh filename="hull_hydro.obj" scale="1.0"/>
+					<thickness value="0.003"/>
+					<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+				</physical>
+				<material name="Fiberglass"/>
+				<look name="yellow"/>
+				<compound_transform rpy="0.0 0.0 0.0" xyz="-0.049 0.0 0.361"/>
+			</external_part>
+
+            
+            
+            <internal_part name="BatteryCylinder" type="cylinder" physics="submerged" buoyant="true">
+				<dimensions radius="0.13" height="0.6"/>
+				<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+				<material name="Neutral"/>
+				<mass value="70.0"/>
+				<look name="manipulator"/>
+				<compound_transform rpy="0.0 1.571 0.0" xyz="-0.099 0.0 0.361"/>
+			</internal_part>
+        </base_link>
+
+       <sensor name="dynamics" type="odometry" rate="30.0">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			<ros_publisher topic="/$(arg robot_name)/dynamics"/>
+		</sensor>
+
+		<sensor name="pressure" type="pressure" rate="5.0">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="-0.48 0.35 -0.4"/>
+			<noise pressure="5.0"/>
+			<ros_publisher topic="/$(arg robot_name)/pressure"/>
+		</sensor>
+
+		<sensor name="dvl" type="dvl" rate="5.0">
+			<link name="Vehicle"/>
+			<origin rpy="3.1416 0.0 -0.785" xyz="-0.75 0.0 0.4"/>
+			<specs beam_angle="30.0"/>
+			<range velocity="9.0 9.0 9.0" altitude_min="0.5" altitude_max="81.0"/>
+			<noise velocity="0.0015" altitude="0.001"/>
+			<ros_publisher topic="/$(arg robot_name)/dvl"/>
+		</sensor>
+
+		<sensor name="imu_filter" type="imu" rate="20.0">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+			<noise angle="0.000001745 0.000001745 0.000001745" angular_velocity="0.00001745"/>
+			<ros_publisher topic="/$(arg robot_name)/imu_filter"/>
+		</sensor>
+
+		<sensor name="gps" type="gps" rate="1.0">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="-0.54 -0.35 -0.74"/>
+			<noise ned_position="0.5"/>
+			<ros_publisher topic="/$(arg robot_name)/gps"/>
+		</sensor>
+
+		<sensor name="front_camera" type="camera" rate="10.0">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 0.0 0.0" xyz="-0.75 0.0 0.4"/>
+			<specs resolution_x="640" resolution_y="480" horizontal_fov="90.0"/>
+			<ros_publisher topic="/$(arg robot_name)/front_camera"/>
+		</sensor>
+<!--
+        <actuator name="ThrusterSway" type="thruster">
+			<link name="Vehicle"/>
+			<origin rpy="0.0 3.1416 1.571" xyz="-0.0627 0.0307 -0.021"/>
+			<specs max_setpoint="${1000.0/60.0*2.0*pi}" inverted_setpoint="true" normalized_setpoint="true"/>
+			<propeller diameter="0.18" right="true">
+				<mesh filename="propeller.obj" scale="1.0" />
+				<material name="Neutral" />
+				<look name="propeller" />
+			</propeller>
+			<rotor_dynamics type="mechanical_pi">
+				<kp value="1.0"/>
+				<ki value="0.5"/>
+				<ilimit value="2.0"/>
+			</rotor_dynamics>
+			<thrust_model type="fluid_dynamics">
+				<thrust_coeff forward="0.48" reverse="0.48"/>
+				<torque_coeff value="0.05"/>
+			</thrust_model>
+			<ros_subscriber topic="/$(arg robot_name)/ThrusterSway/setpoint"/>
+		</actuator>
+-->
+        <world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    </robot>
+</scenario>

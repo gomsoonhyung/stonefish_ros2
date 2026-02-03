@@ -1,0 +1,44 @@
+# MVP Helm Finite State Machine Configuration for Girona500
+finite_state_machine:
+
+  start:
+    initial: true
+    control_mode: idle
+    transitions: [kill, teleop, survey]
+
+  kill:
+    control_mode: idle
+    transitions: [start]
+
+  teleop:
+    control_mode: teleop
+    transitions: [start, kill, survey]
+
+  survey:
+    control_mode: flight
+    transitions: [start, kill, teleop]
+
+behaviors:
+
+  bhv_teleop:
+    plugin: helm/Teleoperation
+    priority:
+      teleop: 1
+
+  # Note: DepthTracking behavior removed - PathFollowing already controls DOF_Z via waypoint z-coordinates
+  # If separate depth tracking is needed, use depth_list, pitch_list, depth_time_list arrays
+
+  bhv_path:
+    plugin: helm/PathFollowing
+    priority:
+      survey: 2
+    # Frame configuration (must match robot frames)
+    default_bhv_world_link: world_ned
+    default_bhv_child_link: base_link
+    # Waypoints as separate arrays (required format for PathFollowing behavior)
+    waypoint_x: [0.0, 10.0, 10.0, 0.0, 0.0]    # X coordinates
+    waypoint_y: [0.0, 0.0, 10.0, 10.0, 0.0]    # Y coordinates
+    waypoint_z: [3.0, 3.0, 3.0, 3.0, 3.0]      # Z coordinates (depth)
+    waypoint_u: [0.5, 0.5, 0.5, 0.5, 0.5]      # Surge velocity per waypoint
+    acceptance_radius: 2.0                      # Distance to consider waypoint reached
+    lookahead_distance: 3.0                     # Lookahead distance for path following

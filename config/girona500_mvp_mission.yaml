@@ -1,0 +1,36 @@
+# MVP Mission Configuration for Girona500 AUV
+/GIRONA500/mvp_helm:
+  ros__parameters:
+    frequency: 10.0
+    local_link: base_link    # Base link name (will be prefixed with namespace)
+    global_link: world_ned   # NED frame for marine robotics
+
+    # Path following behavior parameters
+    "bhv_path.default_bhv_world_link": world_ned
+    "bhv_path.default_bhv_child_link": base_link
+    "bhv_path.waypoint_x":
+      - 0.0
+      - 10.0
+      - 10.0
+      - 0.0
+      - 0.0
+    "bhv_path.waypoint_y":
+      - 0.0
+      - 0.0
+      - 10.0
+      - 10.0
+      - 0.0
+    "bhv_path.waypoint_z":
+      - 3.0
+      - 3.0
+      - 3.0
+      - 3.0
+      - 3.0
+    "bhv_path.waypoint_u":
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+    "bhv_path.acceptance_radius": 2.0
+    "bhv_path.lookahead_distance": 3.0

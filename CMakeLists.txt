@@ -102,7 +102,36 @@ install(
   DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
-
+install(
+  DIRECTORY config
+  DESTINATION share/${PROJECT_NAME}
+)
+install(
+  PROGRAMS
+    scripts/girona500_teleop.py
+    scripts/sensor_monitor.py
+    scripts/custom_auv_teleop.py
+    scripts/custom_auv_sensor_monitor.py
+    scripts/robot_state_publisher.py
+    scripts/odom_to_tf.py
+    scripts/odom_frame_fixer.py
+    scripts/robot_trail_publisher.py
+    scripts/waypoint_visualizer.py
+    scripts/mission_commander.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+install(
+  DIRECTORY scenarios
+  DESTINATION share/${PROJECT_NAME}
+)
+install(
+  DIRECTORY data
+  DESTINATION share/${PROJECT_NAME}
+)
+install(
+  DIRECTORY urdf
+  DESTINATION share/${PROJECT_NAME}
+)
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights

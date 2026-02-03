@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<robot name="girona500">
+
+  <!-- Base link -->
+  <link name="base_link">
+    <inertial>
+      <mass value="160.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="20.0" ixy="0.0" ixz="0.0" iyy="40.0" iyz="0.0" izz="40.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="1.2 0.7 0.7"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Thruster links -->
+  <link name="thruster_surge_port"/>
+  <joint name="thruster_surge_port_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="thruster_surge_port"/>
+    <origin xyz="-0.3297 -0.2587 -0.021" rpy="3.1416 0.0 0.0"/>
+  </joint>
+
+  <link name="thruster_surge_starboard"/>
+  <joint name="thruster_surge_starboard_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="thruster_surge_starboard"/>
+    <origin xyz="-0.3297 0.2587 -0.021" rpy="0.0 0.0 0.0"/>
+  </joint>
+
+  <link name="thruster_heave_bow"/>
+  <joint name="thruster_heave_bow_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="thruster_heave_bow"/>
+    <origin xyz="0.5347 0.0 -0.3137" rpy="0.0 -1.571 -1.571"/>
+  </joint>
+
+  <link name="thruster_heave_stern"/>
+  <joint name="thruster_heave_stern_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="thruster_heave_stern"/>
+    <origin xyz="-0.5827 0.0 -0.3137" rpy="0.0 -1.571 1.571"/>
+  </joint>
+
+  <link name="thruster_sway"/>
+  <joint name="thruster_sway_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="thruster_sway"/>
+    <origin xyz="-0.0627 0.0307 -0.021" rpy="0.0 3.1416 1.571"/>
+  </joint>
+
+</robot>
