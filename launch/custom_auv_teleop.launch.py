@@ -61,20 +61,11 @@ def generate_launch_description():
         output='screen',
     )
 
-    # Custom AUV Teleoperation node (separate terminal for keyboard input)
+    # Custom AUV teleoperation node
     teleop_node = Node(
         package='stonefish_ros2',
         executable='custom_auv_teleop.py',
         name='custom_auv_teleop',
-        output='screen',
-        prefix='xterm -e',
-    )
-
-    # Custom AUV Sensor Monitor node (separate terminal for display)
-    sensor_monitor_node = Node(
-        package='stonefish_ros2',
-        executable='custom_auv_sensor_monitor.py',
-        name='custom_auv_sensor_monitor',
         output='screen',
         prefix='xterm -e',
     )
@@ -88,5 +79,4 @@ def generate_launch_description():
         rendering_quality_arg,
         stonefish_simulator_node,
         teleop_node,
-        sensor_monitor_node,
     ])

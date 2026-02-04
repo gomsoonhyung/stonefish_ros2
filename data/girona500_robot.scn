@@ -134,7 +134,7 @@
 				<compound_transform rpy="0.0 1.571 0.0" xyz="-0.049 0.35 -0.339"/>
 			</internal_part>
 		</base_link>
-        
+
 		<sensor name="dynamics" type="odometry" rate="30.0">
 			<link name="Vehicle"/>
 			<origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
@@ -171,19 +171,19 @@
 			<ros_publisher topic="/$(arg robot_name)/gps"/>
 		</sensor>
 
+		<!-- Front Camera - looking forward -->
 		<sensor name="front_camera" type="camera" rate="10.0">
 			<link name="Vehicle"/>
-			<origin rpy="0.0 0.0 0.0" xyz="-0.75 0.0 0.4"/>
-			<specs resolution_x="640" resolution_y="480" horizontal_fov="90.0"/>
+			<origin xyz="-0.75 0.0 -0.1" rpy="0.0 -1.5708 0.0"/>
+			<specs resolution_x="800" resolution_y="600" horizontal_fov="60.0"/>
 			<ros_publisher topic="/$(arg robot_name)/front_camera"/>
 		</sensor>
 
-		<sensor name="fls" type="fls" rate="10.0">
+		<sensor name="fls" type="fls" rate="5.0">
 			<link name="Vehicle"/>
-			<origin rpy="0.0 0.0 0.0" xyz="0.6 0.0 0.0"/>
-			<specs beams="512" bins="500" horizontal_fov="90.0" vertical_fov="20.0"/>
-			<range distance_min="2.0" distance_max="100.0" gain="1.0"/>
-			<noise multiplicative="0.01" additive="0.02"/>
+			<origin xyz="-0.75 0.0 0.0" rpy="1.5708 0.0 -1.5708"/>
+			<specs beams="64" bins="64" horizontal_fov="90.0" vertical_fov="20.0"/>
+			<settings range_min="1.0" range_max="10.0" gain="1.0"/>
 			<ros_publisher topic="/$(arg robot_name)/fls"/>
 		</sensor>
 
@@ -197,7 +197,6 @@
 				<look name="propeller" />
 			</propeller>
 			<rotor_dynamics type="mechanical_pi">
-				<!-- <rotor_inertia value="0.05"/> -->
 				<kp value="1.0"/>
 				<ki value="0.5"/>
 				<ilimit value="2.0"/>
@@ -219,7 +218,6 @@
 				<look name="propeller" />
 			</propeller>
 			<rotor_dynamics type="mechanical_pi">
-				<!-- <rotor_inertia value="0.05"/> -->
 				<kp value="1.0"/>
 				<ki value="0.5"/>
 				<ilimit value="2.0"/>
@@ -241,7 +239,6 @@
 				<look name="propeller" />
 			</propeller>
 			<rotor_dynamics type="mechanical_pi">
-				<!-- <rotor_inertia value="0.05"/> -->
 				<kp value="1.0"/>
 				<ki value="0.5"/>
 				<ilimit value="2.0"/>
@@ -263,7 +260,6 @@
 				<look name="propeller" />
 			</propeller>
 			<rotor_dynamics type="mechanical_pi">
-				<!-- <rotor_inertia value="0.05"/> -->
 				<kp value="1.0"/>
 				<ki value="0.5"/>
 				<ilimit value="2.0"/>
@@ -285,7 +281,6 @@
 				<look name="propeller" />
 			</propeller>
 			<rotor_dynamics type="mechanical_pi">
-				<!-- <rotor_inertia value="0.05"/> -->
 				<kp value="1.0"/>
 				<ki value="0.5"/>
 				<ilimit value="2.0"/>

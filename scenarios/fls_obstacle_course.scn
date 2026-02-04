@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<scenario>
+	<environment>
+		<ned latitude="41.5" longitude="2.0"/>
+		<sun azimuth="45.0" elevation="60.0"/>
+		<ocean>
+			<waves height="0.0"/>
+			<water density="1031.0" jerlov="0.2"/>
+		</ocean>
+	</environment>
+
+	<materials>
+		<material name="Neutral" density="1031.0" restitution="0.5"/>
+		<material name="Rock" density="3000.0" restitution="0.8"/>
+		<material name="Concrete" density="2400.0" restitution="0.6"/>
+		<material name="Fiberglass" density="1500.0" restitution="0.3"/>
+		<material name="Aluminium" density="2710.0" restitution="0.7"/>
+	</materials>
+
+	<looks>
+		<look name="yellow" rgb="1.0 1.0 0.0" roughness="0.3"/>
+		<look name="red" rgb="1.0 0.0 0.0" roughness="0.3"/>
+		<look name="green" rgb="0.0 1.0 0.0" roughness="0.3"/>
+		<look name="seabed" rgb="0.7 0.7 0.5" roughness="0.9"/>
+		<look name="cliff" rgb="0.45 0.40 0.35" roughness="0.8" metalness="0.1"/>
+		<look name="rock_dark" rgb="0.35 0.30 0.28" roughness="0.9" metalness="0.1"/>
+		<look name="duct" gray="0.3" roughness="0.4" metalness="0.5"/>
+		<look name="propeller" gray="0.2" roughness="0.3" metalness="0.8"/>
+		<look name="manipulator" gray="0.4" roughness="0.4" metalness="0.6"/>
+	</looks>
+
+	<!-- Seabed at 7m depth -->
+	<static name="Bottom" type="plane">
+		<material name="Rock"/>
+		<look name="seabed"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 7.0"/>
+	</static>
+
+	<!-- ===== MARKERS ===== -->
+
+	<static name="StartMarker" type="sphere">
+		<dimensions radius="0.3"/>
+		<material name="Neutral"/>
+		<look name="yellow"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 -1.0"/>
+	</static>
+
+	<static name="GoalMarker" type="sphere">
+		<dimensions radius="0.3"/>
+		<material name="Neutral"/>
+		<look name="red"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="42.0 5.0 -1.0"/>
+	</static>
+
+	<static name="WP1_Marker" type="sphere">
+		<dimensions radius="0.2"/>
+		<material name="Neutral"/>
+		<look name="green"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="18.0 0.0 -1.0"/>
+	</static>
+
+	<static name="WP2_Marker" type="sphere">
+		<dimensions radius="0.2"/>
+		<material name="Neutral"/>
+		<look name="green"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="23.0 3.0 -1.0"/>
+	</static>
+
+	<static name="WP3_Marker" type="sphere">
+		<dimensions radius="0.2"/>
+		<material name="Neutral"/>
+		<look name="green"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="28.0 5.0 -1.0"/>
+	</static>
+
+	<!-- ============================================================== -->
+	<!-- CANYON 1: Straight corridor (x=3~18, path at y=0, walls at y=+-3) -->
+	<!-- Corridor width: 6m, AUV passes through center                   -->
+	<!-- Walls ~3m from center = always within FLS 10m range              -->
+	<!-- ============================================================== -->
+
+	<!-- Left wall (y=-3 side) - 3 segments with small gaps for realism -->
+	<static name="Canyon1_L1" type="box">
+		<dimensions xyz="6.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="cliff"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="5.0 -3.5 3.0"/>
+	</static>
+
+	<static name="Canyon1_L2" type="box">
+		<dimensions xyz="5.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="rock_dark"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="11.0 -3.5 3.0"/>
+	</static>
+
+	<static name="Canyon1_L3" type="box">
+		<dimensions xyz="4.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="cliff"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="16.5 -3.5 3.0"/>
+	</static>
+
+	<!-- Right wall (y=+3 side) - 3 segments -->
+	<static name="Canyon1_R1" type="box">
+		<dimensions xyz="5.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="rock_dark"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="4.5 3.5 3.0"/>
+	</static>
+
+	<static name="Canyon1_R2" type="box">
+		<dimensions xyz="6.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="cliff"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="10.5 3.5 3.0"/>
+	</static>
+
+	<static name="Canyon1_R3" type="box">
+		<dimensions xyz="5.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="rock_dark"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="16.5 3.5 3.0"/>
+	</static>
+
+	<!-- Small rock on canyon floor for variety -->
+	<static name="Canyon1_Rock1" type="sphere">
+		<dimensions radius="0.5"/>
+		<material name="Rock"/>
+		<look name="rock_dark"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="8.0 -1.5 5.5"/>
+	</static>
+
+	<static name="Canyon1_Rock2" type="sphere">
+		<dimensions radius="0.4"/>
+		<material name="Rock"/>
+		<look name="cliff"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="13.0 1.8 5.5"/>
+	</static>
+
+	<!-- ============================================================== -->
+	<!-- TRANSITION: Open area with guide pillars (x=18~28)              -->
+	<!-- AUV turns from y=0 toward y=5, gentle curve                     -->
+	<!-- Large pillars guide the path, always visible on FLS              -->
+	<!-- ============================================================== -->
+
+	<!-- Inner guide pillar - prevents cutting too tight -->
+	<static name="Turn_Inner1" type="cylinder">
+		<dimensions radius="1.0" height="6.0"/>
+		<material name="Rock"/>
+		<look name="cliff"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="21.0 -1.0 3.0"/>
+	</static>
+
+	<static name="Turn_Inner2" type="cylinder">
+		<dimensions radius="0.8" height="6.0"/>
+		<material name="Rock"/>
+		<look name="rock_dark"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="25.0 1.0 3.0"/>
+	</static>
+
+	<!-- Outer guide pillar - boundary on the wide side -->
+	<static name="Turn_Outer1" type="cylinder">
+		<dimensions radius="1.0" height="6.0"/>
+		<material name="Rock"/>
+		<look name="rock_dark"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="20.0 5.0 3.0"/>
+	</static>
+
+	<static name="Turn_Outer2" type="cylinder">
+		<dimensions radius="1.2" height="6.0"/>
+		<material name="Rock"/>
+		<look name="cliff"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="24.0 7.0 3.0"/>
+	</static>
+
+	<!-- ============================================================== -->
+	<!-- CANYON 2: Straight corridor (x=28~42, path at y=5, walls at y=2,8) -->
+	<!-- Same 6m width, shifted to y=5 center                            -->
+	<!-- ============================================================== -->
+
+	<!-- Left wall (y=2 side) - 3 segments -->
+	<static name="Canyon2_L1" type="box">
+		<dimensions xyz="5.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="cliff"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="30.0 1.5 3.0"/>
+	</static>
+
+	<static name="Canyon2_L2" type="box">
+		<dimensions xyz="5.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="rock_dark"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="35.5 1.5 3.0"/>
+	</static>
+
+	<static name="Canyon2_L3" type="box">
+		<dimensions xyz="4.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="cliff"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="40.5 1.5 3.0"/>
+	</static>
+
+	<!-- Right wall (y=8 side) - 3 segments -->
+	<static name="Canyon2_R1" type="box">
+		<dimensions xyz="5.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="rock_dark"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="30.5 8.5 3.0"/>
+	</static>
+
+	<static name="Canyon2_R2" type="box">
+		<dimensions xyz="6.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="cliff"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="36.0 8.5 3.0"/>
+	</static>
+
+	<static name="Canyon2_R3" type="box">
+		<dimensions xyz="4.0 1.0 6.0"/>
+		<material name="Rock"/>
+		<look name="rock_dark"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="41.0 8.5 3.0"/>
+	</static>
+
+	<!-- Floor rocks in canyon 2 -->
+	<static name="Canyon2_Rock1" type="sphere">
+		<dimensions radius="0.6"/>
+		<material name="Rock"/>
+		<look name="rock_dark"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="33.0 3.5 5.5"/>
+	</static>
+
+	<static name="Canyon2_Rock2" type="sphere">
+		<dimensions radius="0.5"/>
+		<material name="Rock"/>
+		<look name="cliff"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="38.0 6.5 5.5"/>
+	</static>
+
+	<!-- ===== AUV ===== -->
+	<include file="girona500_robot.scn">
+		<arg name="robot_name" value="GIRONA500"/>
+	</include>
+</scenario>
