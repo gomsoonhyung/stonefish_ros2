@@ -24,6 +24,7 @@
 //
 
 #include "stonefish_ros2/ROS2ScenarioParser.h"
+#include <geometry_msgs/msg/twist_with_covariance_stamped.hpp>
 #include "stonefish_ros2/ROS2SimulationManager.h"
 #include "stonefish_ros2/ROS2Interface.h"
 
@@ -785,6 +786,14 @@ Sensor* ROS2ScenarioParser::ParseSensor(XMLElement* element, const std::string& 
                         {
                             std::string altTopicStr = std::string(altTopic);
                             pubs[sensorName + "/altitude"] = nh_->create_publisher<sensor_msgs::msg::Range>(altTopicStr, queueSize);
+                        }
+
+                        //Third topic with water-track velocity (optional)
+                        const char* waterTopic = nullptr;
+                        if(item->QueryStringAttribute("water_velocity_topic", &waterTopic) == XML_SUCCESS)
+                        {
+                            std::string waterTopicStr = std::string(waterTopic);
+                            pubs[sensorName + "/water_velocity"] = nh_->create_publisher<geometry_msgs::msg::TwistWithCovarianceStamped>(waterTopicStr, queueSize);
                         }
                     }
                         break;

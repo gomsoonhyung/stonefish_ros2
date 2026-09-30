@@ -236,6 +236,27 @@ void ROS2Interface::PublishDVLAltitude(rclcpp::PublisherBase::SharedPtr pub, DVL
     std::static_pointer_cast<rclcpp::Publisher<sensor_msgs::msg::Range>>(pub)->publish(msg);
 }
 
+void ROS2Interface::PublishDVLWaterVelocity(rclcpp::PublisherBase::SharedPtr pub, DVL* dvl) const
+{
+    //Get data (water velocity relative to the DVL, expressed in the DVL frame)
+    Sample s = dvl->getLastSample();
+    unsigned short status = (unsigned short)trunc(s.getValue(7));
+    bool valid = (status == 1 || status == 2); //1: water ping only, 2: bottom and water ping
+    //Publish twist message
+    geometry_msgs::msg::TwistWithCovarianceStamped msg;
+    msg.header.stamp = nh_->get_clock()->now();
+    msg.header.frame_id = dvl->getName();
+    msg.twist.twist.linear.x = s.getValue(4);
+    msg.twist.twist.linear.y = s.getValue(5);
+    msg.twist.twist.linear.z = s.getValue(6);
+    for(unsigned int i=0; i<3; ++i)
+    {
+        sf::Scalar sd = dvl->getSensorChannelDescription(4+i).stdDev;
+        msg.twist.covariance[i*7] = valid ? sd*sd : -1.0; //Negative covariance marks an invalid measurement
+    }
+    std::static_pointer_cast<rclcpp::Publisher<geometry_msgs::msg::TwistWithCovarianceStamped>>(pub)->publish(msg);
+}
+
 void ROS2Interface::PublishGPS(rclcpp::PublisherBase::SharedPtr pub, GPS* gps) const
 {
     Sample s = gps->getLastSample();

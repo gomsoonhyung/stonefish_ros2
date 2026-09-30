@@ -71,6 +71,7 @@ namespace sf
         void PublishPressure(rclcpp::PublisherBase::SharedPtr pub, Pressure* press) const;
         void PublishDVL(rclcpp::PublisherBase::SharedPtr pub, DVL* dvl) const;
         void PublishDVLAltitude(rclcpp::PublisherBase::SharedPtr pub, DVL* dvl) const;
+        void PublishDVLWaterVelocity(rclcpp::PublisherBase::SharedPtr pub, DVL* dvl) const;
         void PublishGPS(rclcpp::PublisherBase::SharedPtr pub, GPS* gps) const;
         void PublishOdometry(rclcpp::PublisherBase::SharedPtr pub, Odometry* odom) const;
         void PublishINS(rclcpp::PublisherBase::SharedPtr pub, INS* ins) const;

@@ -243,6 +243,8 @@ void ROS2SimulationManager::SimulationStepCompleted(Scalar timeStep)
                     interface_->PublishDVL(pubs_.at(sensor->getName()), (DVL*)sensor);
                     if(pubs_.find(sensor->getName() + "/altitude") != pubs_.end())
                         interface_->PublishDVLAltitude(pubs_.at(sensor->getName() + "/altitude"), (DVL*)sensor);
+                    if(pubs_.find(sensor->getName() + "/water_velocity") != pubs_.end())
+                        interface_->PublishDVLWaterVelocity(pubs_.at(sensor->getName() + "/water_velocity"), (DVL*)sensor);
                 }
                     break;
 
